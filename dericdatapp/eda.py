@@ -1,3 +1,5 @@
+import pandas as pd
+
 def analyze_numerical_statistics(df: pd.DataFrame):
     """
     Compute and display descriptive statistics for numerical features.
