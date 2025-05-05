@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build-meta"
+
+[project]
+name = "dericdatapp"
+version = "0.0.0"
+dependencies = [
+    "numpy",
+    "pandas"
+]
