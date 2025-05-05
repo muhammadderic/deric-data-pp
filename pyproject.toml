@@ -1,11 +1,20 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build-meta"
 
 [project]
 name = "dericdatapp"
 version = "0.0.0"
-dependencies = [
-    "numpy",
-    "pandas"
+description = "A quantitative data lens for preparation and profiling"
+authors = [
+    {name = "Deric"}
 ]
+dependencies = [
+    "pandas",
+    "numpy"
+]
+requires-python = ">=3.9"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dericdatapp*"]

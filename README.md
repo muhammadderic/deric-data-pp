@@ -8,7 +8,7 @@ This package serves as a diagnostic bridge between raw data and actionable insig
 
 ### Colab Usage Instructions
 ```python
-!pip install git+https://github.com/muhammadderic/dericdatapp.git
+!pip install git+https://github.com/muhammadderic/deric-data-pp.git
 
 import dericdatapp.eda as dda
 # dda.analyze_numerical_statistics(your_dataframe)
