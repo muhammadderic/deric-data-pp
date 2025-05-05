@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build-meta"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "dericdatapp"
@@ -10,8 +10,8 @@ authors = [
     {name = "Deric"}
 ]
 dependencies = [
-    "pandas",
-    "numpy"
+    "pandas>=2.0.0",
+    "numpy>=1.24.0"
 ]
 requires-python = ">=3.9"
 
