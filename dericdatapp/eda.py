@@ -139,7 +139,7 @@ def show_unique_values_of_cat_columns(df: pd.DataFrame):
     return None
 
 
-def show_unique_values_of_cat_columns(df: pd.DataFrame, column_name: str):
+def show_column_unique_values(df: pd.DataFrame, column_name: str):
     """
     Prints unique values only if count <= 15.
 
