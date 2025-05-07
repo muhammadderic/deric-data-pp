@@ -1,2 +1,2 @@
 from .info import info
-from .eda import analyze_numerical_statistics, show_missing_values
+from .eda import analyze_numerical_statistics, show_missing_values, show_unique_values_of_cat_columns, show_column_unique_values

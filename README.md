@@ -11,8 +11,10 @@ This package serves as a diagnostic bridge between raw data and actionable insig
 !pip install git+https://github.com/muhammadderic/deric-data-pp.git --quiet
 
 import dericdatapp.eda as dda
-dda.analyze_numerical_statistics(your_dataframe)
-dda.show_missing_values(your_dataframe)
+dda.analyze_numerical_statistics(df)
+dda.show_missing_values(df)
+dda.show_unique_values_of_cat_columns(df)
+dda.show_column_unique_values(df, column_name)
 ```
 
 ### Project Structure

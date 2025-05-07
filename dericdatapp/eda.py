@@ -97,3 +97,71 @@ def show_missing_values(df: pd.DataFrame):
         print(f"- total_missing: {counts['total_missing']}")
 
     return None
+
+
+def show_unique_values_of_cat_columns(df: pd.DataFrame):
+    """
+    Identifies all categorical columns and prints their unique value summaries.
+
+    Parameters:
+    df (pd.DataFrame): The dataset to analyze.
+
+    Returns:
+    - None
+    """
+    # Identify categorical columns (object or category types)
+    cat_cols = df.select_dtypes(include=['object', 'category']).columns
+
+    if len(cat_cols) == 0:
+        print("No categorical columns found in the DataFrame.")
+        return None
+
+    print(f"Found {len(cat_cols)} categorical columns.\n")
+
+    for col in cat_cols:
+        unique_values = df[col].unique()
+        unique_count = len(unique_values)
+        total_rows = len(df)
+
+        print(f"--- Field: '{col}' ---")
+        print(f"Total Row Count: {total_rows}")
+        print(f"Unique Value Count: {unique_count}")
+
+        # Only print the list if it's manageable (15 or fewer)
+        if unique_count <= 15:
+            # We cast to list and handle potential NaN values for cleaner printing
+            print(f"Unique Values: {list(unique_values)}")
+        else:
+            print(f"Unique Values: [Too many to display - {unique_count} items]")
+        
+        print()
+
+    return None
+
+
+def show_unique_values_of_cat_columns(df: pd.DataFrame, column_name: str):
+    """
+    Prints unique values only if count <= 15.
+
+    Parameters:
+    df (pd.DataFrame): The dataset to analyze.
+    column_name (str): The name of the field to check for unique values.
+
+    Returns:
+    - None
+    """
+    unique_values = df[column_name].unique()
+    unique_count = len(unique_values)
+    total_rows = len(df)
+
+    print(f"--- Total unique values for field: '{column_name}' ---")
+    print(f"Total Row Count: {total_rows}")
+    print(f"Unique Value Count: {unique_count}")
+
+    # Only print the list if it's manageable (15 or fewer)
+    if unique_count <= 15:
+        print(f"Unique Values: {list(unique_values)}")
+    else:
+        print(f"Unique Values: [Too many to display - {unique_count} items]")
+
+    return None
