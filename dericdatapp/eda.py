@@ -1,18 +1,53 @@
 import pandas as pd
 
-def analyze_numerical_statistics(df: pd.DataFrame):
+def classify_dataframe_columns(df: pd.DataFrame):
+    """
+    Separates dataframe columns into numerical, categorical, and other types.
+
+    Parameters:
+    df (pd.DataFrame): The dataset to analyze.
+
+    Returns:
+    tuple: (numerical_cols, categorical_cols, other_cols) as lists of strings.
+    """
+    
+    # 1. Identify Numerical Columns (Integers and Floats)
+    num_cols = df.select_dtypes(include=['number']).columns.tolist()
+    
+    # 2. Identify Categorical Columns (Objects and Categorical types)
+    cat_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
+    
+    # 3. Identify Other Columns (Datetime, Timedelta, Bool, etc.)
+    # We exclude 'number', 'object', and 'category' to find the rest
+    other_cols = df.select_dtypes(exclude=['number', 'object', 'category']).columns.tolist()
+
+    # Print Summary Table-style counts
+    print("--- Column Type Summary ---")
+    print(f"Numerical Columns:   {len(num_cols)}")
+    print(f"Categorical Columns: {len(cat_cols)}")
+    print(f"Other Columns:       {len(other_cols)}")
+    
+    # Show specific types for 'Other' if they exist
+    if other_cols:
+        print("\nDetails for 'Other' Data Types:")
+        for col in other_cols:
+            print(f"- {col}: {df[col].dtype}")
+    
+    return num_cols, cat_cols, other_cols
+
+def analyze_numerical_statistics(df: pd.DataFrame, numerical_cols):
     """
     Compute and display descriptive statistics for numerical features.
 
     Parameters:
     - df (pd.DataFrame): Dataset containing numerical variables.
+    - numerical_cols (list of str): List of numerical column names to analyze.
 
     Returns:
     - None: This function prints a summary directly to the console.
     """
 
     # 1. Correct type selection for all numbers
-    numerical_cols = df.select_dtypes(include=["number"]).columns
     numerical_stats = {} 
 
     for col in numerical_cols:
@@ -58,6 +93,61 @@ def analyze_numerical_statistics(df: pd.DataFrame):
         print(f"  Values:  Min: {stats['min']} | Max: {stats['max']}")
         print(f"  Quality: Missing: {stats['missing_count']} ({stats['missing_percentage']}%)")
         print(f"  Tiers:   Q1: {stats['q1']} | Q3: {stats['q3']} | IQR: {stats['iqr']}")
+
+    return None
+
+
+def analyze_categorical_statistics(df, categorical_cols, top_n=20):
+    """
+    Compute and display descriptive statistics for categorical features.
+
+    Parameters:
+    - df (pd.DataFrame): Dataset containing categorical variables.
+    - categorical_cols (list of str): List of categorical column names to analyze.
+    - top_n (int, optional): Number of top frequent categories to store (default=20).
+
+    Returns:
+    - None
+    """
+
+    categorical_stats = {}  # Local result storage
+
+    for col in categorical_cols:
+
+        freq_counts = df[col].value_counts()
+        freq_percentages = df[col].value_counts(normalize=True) * 100
+
+        distribution = {}
+        for idx, (value, count) in enumerate(freq_counts.items()):
+            if idx < top_n:
+                percentage = freq_percentages[value]
+                distribution[str(value)] = {
+                    'count': int(count),
+                    'percentage': round(percentage, 2)
+                }
+
+        stats = {
+            'unique_values': df[col].nunique(),
+            'missing_count': int(df[col].isna().sum()),
+            'missing_percentage': round(df[col].isna().sum() / len(df) * 100, 2),
+            'mode': str(df[col].mode()[0]) if not df[col].mode().empty else None,
+            'mode_frequency': int(freq_counts.iloc[0]) if not freq_counts.empty else 0,
+            'mode_percentage': round(freq_percentages.iloc[0], 2) if not freq_percentages.empty else 0,
+            'top_distribution': distribution
+        }
+
+        categorical_stats[col] = stats
+
+    # Print section moved inside function
+    for col, stats in categorical_stats.items():
+        print(f"\nField ({col}):")
+        print(f"  Unique: {stats['unique_values']}")
+        print(f"  Mode: '{stats['mode']}' ({stats['mode_percentage']}% of data)")
+        print(f"  Missing: {stats['missing_count']} ({stats['missing_percentage']}%)")
+        print(f"  Top 5 values:")
+
+        for val, freq in list(stats['top_distribution'].items())[:5]:
+            print(f"    '{val}': {freq['count']} rows ({freq['percentage']}%)")
 
     return None
 
