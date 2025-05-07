@@ -60,3 +60,40 @@ def analyze_numerical_statistics(df: pd.DataFrame):
         print(f"  Tiers:   Q1: {stats['q1']} | Q3: {stats['q3']} | IQR: {stats['iqr']}")
 
     return None
+
+
+def show_missing_values(df: pd.DataFrame):
+    """
+    Show null and blank value counts.
+
+    Returns: 
+    - None
+    """
+
+    summary = {}
+
+    for col in df.columns:
+        null_count = df[col].isnull().sum()
+        blank_count = 0
+
+        if df[col].dtype == "object":
+            # Using .fillna("") ensures we don't get errors when stripping
+            blank_count = (df[col].astype(str).str.strip() == "").sum()
+        total_missing = int(null_count + blank_count)
+        # Only store and print if there is actually something missing
+        if total_missing > 0:
+            summary[col] = {
+                "null_values": int(null_count),
+                "blank_values": int(blank_count),
+                "total_missing": total_missing
+            }
+
+    # Printing Section
+    print("Missing Value Summary:")
+    for col, counts in summary.items():
+        print(f"\nColumn: {col}")
+        print(f"- null_values: {counts['null_values']}")
+        print(f"- blank_values: {counts['blank_values']}")
+        print(f"- total_missing: {counts['total_missing']}")
+
+    return None
