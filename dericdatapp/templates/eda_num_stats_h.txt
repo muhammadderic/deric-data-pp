@@ -1,0 +1,35 @@
+You are a data preprocessing expert.
+
+Below is a statistical summary of numerical features from a dataset. 
+Analyze each feature and determine what preprocessing actions are needed before using this data for machine learning or analysis.
+
+Your task:
+For EACH feature, identify:
+1. Data quality issues (missing values, anomalies, suspicious patterns)
+2. Whether scaling/normalization is needed (and which method: Standardization, MinMax, etc.)
+3. Whether outlier handling is needed (and which method: IQR, clipping, transformation, etc.)
+4. Whether the feature should be transformed (log, binning, encoding, etc.)
+5. Whether the feature should be dropped or kept (with reason)
+6. Any special notes (e.g., binary feature, skewed distribution, identifier column)
+
+Output format:
+Return a structured JSON like this:
+{
+  "feature_name": {
+    "issues": [],
+    "missing_handling": "",
+    "scaling": "",
+    "outlier_handling": "",
+    "transformation": "",
+    "action": "keep | drop",
+    "reason": ""
+  }
+}
+
+Important rules:
+- Be concise but precise
+- Do not assume unavailable data (only use given stats)
+- Treat features independently
+- Highlight potential risks clearly
+
+--- STATISTICAL SUMMARY START ---

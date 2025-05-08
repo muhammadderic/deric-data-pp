@@ -1,6 +1,10 @@
 import pandas as pd
 
-from .utils import add_raw_support
+from .utils import add_raw_support, custom_prompt
+from .configs import EDA_FUNCTION_PROMPTS
+
+# Extract the specific text for each function
+num_stats_text = EDA_FUNCTION_PROMPTS.get("analyze_numerical_statistics", {})
 
 @add_raw_support
 def classify_dataframe_columns(df: pd.DataFrame):
@@ -40,6 +44,7 @@ def classify_dataframe_columns(df: pd.DataFrame):
 
 
 @add_raw_support
+@custom_prompt(header=num_stats_text.get("header"), footer=num_stats_text.get("footer"))
 def analyze_numerical_statistics(df: pd.DataFrame, numerical_cols):
     """
     Compute and display descriptive statistics for numerical features.
@@ -83,10 +88,6 @@ def analyze_numerical_statistics(df: pd.DataFrame, numerical_cols):
         numerical_stats[col] = stats
 
     # 2. Printing Section
-    print("-" * 31)
-    print("DERICDATAPP: NUMERICAL ANALYSIS")
-    print("-" * 31)
-
     for col, stats in numerical_stats.items():
         if 'error' in stats:
             print(f"\n{col}: [!] ALL VALUES ARE NULL - SKIPPING")
