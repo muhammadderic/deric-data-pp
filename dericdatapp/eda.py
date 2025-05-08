@@ -1,5 +1,8 @@
 import pandas as pd
 
+from .utils import add_raw_support
+
+@add_raw_support
 def classify_dataframe_columns(df: pd.DataFrame):
     """
     Separates dataframe columns into numerical, categorical, and other types.
@@ -35,6 +38,8 @@ def classify_dataframe_columns(df: pd.DataFrame):
     
     return num_cols, cat_cols, other_cols
 
+
+@add_raw_support
 def analyze_numerical_statistics(df: pd.DataFrame, numerical_cols):
     """
     Compute and display descriptive statistics for numerical features.
@@ -97,6 +102,7 @@ def analyze_numerical_statistics(df: pd.DataFrame, numerical_cols):
     return None
 
 
+@add_raw_support
 def analyze_categorical_statistics(df, categorical_cols, top_n=20):
     """
     Compute and display descriptive statistics for categorical features.
@@ -152,6 +158,7 @@ def analyze_categorical_statistics(df, categorical_cols, top_n=20):
     return None
 
 
+@add_raw_support
 def show_missing_values(df: pd.DataFrame):
     """
     Show null and blank value counts.
@@ -189,6 +196,7 @@ def show_missing_values(df: pd.DataFrame):
     return None
 
 
+@add_raw_support
 def show_unique_values_of_cat_columns(df: pd.DataFrame):
     """
     Identifies all categorical columns and prints their unique value summaries.

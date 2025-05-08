@@ -4,9 +4,11 @@
 This package serves as a diagnostic bridge between raw data and actionable insight by automating the initial interrogation of datasets. It enforces a rigorous, standardized approach to data profiling, ensuring that structural anomalies and statistical distributions are exposed before any modeling begins.
 
 ### Features
-* JUST WAIT
+* Exploratory Data Analysis
+* Raw Code View Support
 
 ### Colab Usage Instructions
+#### General
 ```python
 !pip install git+https://github.com/muhammadderic/deric-data-pp.git --quiet
 
@@ -18,6 +20,30 @@ dda.show_missing_values(df)
 dda.show_unique_values_of_cat_columns(df)
 dda.show_column_unique_values(df, column_name)
 ```
+
+#### Raw Code Support
+To view the underlying logic of any dericdatapp function directly within your notebook, use the .raw() method attached to the function.
+
+Example 1: View Full Source Code
+This will display the complete function, including its docstrings and internal comments.
+
+```python
+import dericdatapp as ddp
+# Display the full implementation of the classifier
+ddp.eda.classify_dataframe_columns.raw()
+```
+
+Example 2: View Pure Logic (No Comments)
+If you want to see just the executable code without the documentation or commentary, pass pure=True.
+
+```python
+import dericdatapp as ddp
+# Display only the functional code
+ddp.eda.classify_dataframe_columns.raw(pure=True)
+```
+
+Summary of the Feature
+The .raw() utility is a built-in introspection tool designed for transparency and education. It allows users to instantly audit the preprocessing logic or copy specific code snippets for customization without leaving the Google Colab environment or browsing external repositories.
 
 ### Project Structure
 ```
