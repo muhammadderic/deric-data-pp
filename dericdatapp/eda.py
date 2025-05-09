@@ -3,7 +3,7 @@ import pandas as pd
 from .utils import add_raw_support, custom_prompt, get_prompt
 # from .configs import EDA_FUNCTION_PROMPTS
 
-EDA_NUM_STATS_H = open("templates/eda_num_stats_h.txt").read()
+# EDA_NUM_STATS_H = open("templates/eda_num_stats_h.txt").read()
 
 # Extract the specific text for each function
 # num_stats_text = EDA_FUNCTION_PROMPTS.get("analyze_numerical_statistics", {})
