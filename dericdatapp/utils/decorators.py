@@ -23,30 +23,39 @@ def add_raw_support(func):
 
 
 class PromptResult:
-    def __init__(self, data, header, footer):
-        self.data = data
+    def __init__(self, func, args, kwargs, header, footer):
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
         self.header = header
         self.footer = footer
 
     def prompt(self):
-        """Prints the framed result and returns the data."""
-        # Python's print() will render the triple-quoted string perfectly
-        print(self.header) 
-        print(self.data)
-        print(self.footer)
-        return self.data
+        """Executes the function framed by the modular header and footer."""
+        # 1. Print the long-form Header from your .txt file
+        if self.header:
+            print(self.header.strip())
+            print()
+        
+        # 2. Execute the actual function (which prints its own tables/text)
+        result = self.func(*self.args, **self.kwargs)
+        
+        # 3. Print the Footer
+        if self.footer:
+            print()
+            print(self.footer.strip())
+            
+        return result
 
     def __repr__(self):
-        # This ensures that if they DON'T call .prompt(), it just looks like normal data
-        return repr(self.data)
+        return "<dericdatapp.PromptResult: Call .prompt() to view analysis>"
 
-def custom_prompt(header="--- START ---", footer="--- END ---"):
+def custom_prompt(header=None, footer=None):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            # Run the function logic
-            result_data = func(*args, **kwargs)
-            # Return the object that has the .prompt() method
-            return PromptResult(result_data, header, footer)
+            # We return the OBJECT without running the function yet
+            # This allows the .prompt() call to control the timing
+            return PromptResult(func, args, kwargs, header, footer)
         return wrapper
     return decorator
