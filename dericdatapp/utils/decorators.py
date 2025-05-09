@@ -1,5 +1,7 @@
 import inspect
 import functools
+import io
+from contextlib import redirect_stdout
 
 def add_raw_support(func):
     @functools.wraps(func)
@@ -23,10 +25,6 @@ def add_raw_support(func):
 
 
 class PromptResult:
-    """
-    Holds execution context and allows re-running with prompt.
-    """
-
     def __init__(self, func, args, kwargs, header=None, footer=None):
         self.func = func
         self.args = args
@@ -34,18 +32,39 @@ class PromptResult:
         self.header = header
         self.footer = footer
 
+        self._executed = False
+        self._captured_output = None
+
+    def _execute_and_capture(self):
+        """Run function once and capture its printed output."""
+        if not self._executed:
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                self.func(*self.args, **self.kwargs)
+
+            self._captured_output = buffer.getvalue()
+            self._executed = True
+
+    def run(self):
+        """Default behavior: print only the function output."""
+        self._execute_and_capture()
+        print(self._captured_output, end="")
+
     def prompt(self):
+        """Print header + captured output + footer (no re-execution)."""
+        self._execute_and_capture()
+
         if self.header:
             print(self.header.rstrip())
 
-        # Re-run function (side-effect print)
-        self.func(*self.args, **self.kwargs)
+        print(self._captured_output, end="")
 
         if self.footer:
             print(self.footer.rstrip())
 
-    # Prevent notebook from printing None / object
     def __repr__(self):
+        # Auto-run when user just calls the function
+        self.run()
         return ""
 
     __str__ = __repr__
@@ -55,9 +74,6 @@ def custom_prompt(header=None, footer=None):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            # Default behavior → execute immediately
-            func(*args, **kwargs)
-
             return PromptResult(
                 func=func,
                 args=args,
