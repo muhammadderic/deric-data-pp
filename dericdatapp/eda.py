@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .utils import add_raw_support, custom_prompt
+from .utils import add_raw_support, custom_prompt, get_prompt
 # from .configs import EDA_FUNCTION_PROMPTS
 
 EDA_NUM_STATS_H = open("templates/eda_num_stats_h.txt").read()
@@ -46,7 +46,10 @@ def classify_dataframe_columns(df: pd.DataFrame):
 
 
 @add_raw_support
-@custom_prompt(header=EDA_NUM_STATS_H, footer="--- STATISTICAL SUMMARY END ---")
+@custom_prompt(
+    header=get_prompt("eda_num_stats_h"),
+    footer="--- STATISTICAL SUMMARY END ---",
+)
 def analyze_numerical_statistics(df: pd.DataFrame, numerical_cols):
     """
     Compute and display descriptive statistics for numerical features.

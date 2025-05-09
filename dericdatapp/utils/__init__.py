@@ -1,2 +1,2 @@
 from .decorators import add_raw_support, custom_prompt
-from .loaders import load_template
+from .loaders import load_template, get_prompt

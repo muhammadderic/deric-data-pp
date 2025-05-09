@@ -23,32 +23,29 @@ def add_raw_support(func):
 
 
 class PromptResult:
+    """
+    Holds execution context and allows re-running with prompt.
+    """
+
     def __init__(self, func, args, kwargs, header=None, footer=None):
         self.func = func
         self.args = args
         self.kwargs = kwargs
         self.header = header
         self.footer = footer
-        self._executed = False
-
-    def run(self):
-        if not self._executed:
-            self.func(*self.args, **self.kwargs)
-            self._executed = True
 
     def prompt(self):
         if self.header:
             print(self.header.rstrip())
 
-        self.run()
+        # Re-run function (side-effect print)
+        self.func(*self.args, **self.kwargs)
 
         if self.footer:
             print(self.footer.rstrip())
 
+    # Prevent notebook from printing None / object
     def __repr__(self):
-        # Auto-run for notebook display
-        if not self._executed:
-            self.run()
         return ""
 
     __str__ = __repr__
@@ -58,12 +55,15 @@ def custom_prompt(header=None, footer=None):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            # Default behavior → execute immediately
+            func(*args, **kwargs)
+
             return PromptResult(
-                func,
-                args,
-                kwargs,
-                header() if callable(header) else header,
-                footer() if callable(footer) else footer,
+                func=func,
+                args=args,
+                kwargs=kwargs,
+                header=header() if callable(header) else header,
+                footer=footer() if callable(footer) else footer,
             )
         return wrapper
     return decorator
