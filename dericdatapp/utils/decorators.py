@@ -23,39 +23,47 @@ def add_raw_support(func):
 
 
 class PromptResult:
-    def __init__(self, func, args, kwargs, header, footer):
+    def __init__(self, func, args, kwargs, header=None, footer=None):
         self.func = func
         self.args = args
         self.kwargs = kwargs
         self.header = header
         self.footer = footer
+        self._executed = False
+
+    def run(self):
+        if not self._executed:
+            self.func(*self.args, **self.kwargs)
+            self._executed = True
 
     def prompt(self):
-        """Executes the function framed by the modular header and footer."""
-        # 1. Print the long-form Header from your .txt file
         if self.header:
-            print(self.header.strip())
-            print()
-        
-        # 2. Execute the actual function (which prints its own tables/text)
-        result = self.func(*self.args, **self.kwargs)
-        
-        # 3. Print the Footer
+            print(self.header.rstrip())
+
+        self.run()
+
         if self.footer:
-            print()
-            print(self.footer.strip())
-            
-        return result
+            print(self.footer.rstrip())
 
     def __repr__(self):
-        return "<dericdatapp.PromptResult: Call .prompt() to view analysis>"
+        # Auto-run for notebook display
+        if not self._executed:
+            self.run()
+        return ""
+
+    __str__ = __repr__
+
 
 def custom_prompt(header=None, footer=None):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            # We return the OBJECT without running the function yet
-            # This allows the .prompt() call to control the timing
-            return PromptResult(func, args, kwargs, header, footer)
+            return PromptResult(
+                func,
+                args,
+                kwargs,
+                header() if callable(header) else header,
+                footer() if callable(footer) else footer,
+            )
         return wrapper
     return decorator
