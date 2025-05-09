@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dericdatapp"
-version = "0.0.1"
+version = "0.1.0"
 description = "A quantitative data lens for preparation and profiling"
 authors = [
     {name = "Deric"}

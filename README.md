@@ -6,6 +6,7 @@ This package serves as a diagnostic bridge between raw data and actionable insig
 ## Features
 * Exploratory Data Analysis
 * Raw Code View Support
+* Prompt Preview
 
 ## Colab Usage Instructions
 ### General
