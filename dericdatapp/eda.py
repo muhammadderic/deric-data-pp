@@ -109,6 +109,10 @@ def analyze_numerical_statistics(df: pd.DataFrame, numerical_cols):
 
 
 @add_raw_support
+@custom_prompt(
+    header=get_prompt("eda_cat_stats_h"),
+    footer="--- STATISTICAL SUMMARY END ---",
+)
 def analyze_categorical_statistics(df, categorical_cols, top_n=20):
     """
     Compute and display descriptive statistics for categorical features.

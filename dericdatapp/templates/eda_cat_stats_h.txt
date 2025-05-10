@@ -1,0 +1,69 @@
+You are a data preprocessing expert.
+
+Below is a statistical summary of categorical features from a dataset.
+Analyze each feature and determine what preprocessing actions are needed before using this data for machine learning or analysis.
+
+Your task:
+For EACH feature, identify:
+1. Data quality issues
+   - Missing values
+   - High cardinality (too many unique values)
+   - Imbalanced distribution (dominant category)
+   - Rare categories
+   - Suspicious patterns (e.g., all unique → possible identifier)
+2. Missing value handling
+   - Drop rows
+   - Fill with "Unknown" / mode / new category
+   - Leave as is (if no missing)
+3. Encoding strategy
+   - One-Hot Encoding
+   - Label Encoding
+   - Target Encoding
+   - Frequency Encoding
+   - No encoding needed (if dropping)
+4. Cardinality handling
+   - Keep as is
+   - Group rare categories into "Other"
+   - Reduce categories
+   - Drop feature (if too high cardinality and not useful)
+5. Feature transformation
+   - Combine categories
+   - Simplify values
+   - Convert to binary (if applicable)
+   - No transformation needed
+6. Whether the feature should be dropped or kept
+   - Based on usefulness, uniqueness, and modeling impact
+7. Feature type classification
+   - Nominal (no order)
+   - Ordinal (has order)
+   - Identifier (unique values per row)
+8. Any special notes
+   - Leakage risk
+   - Identifier column warning
+   - Business logic considerations
+
+Output format:
+Return a structured JSON like this:
+```json
+{
+  "feature_name": {
+    "type": "nominal | ordinal | identifier",
+    "issues": [],
+    "missing_handling": "",
+    "encoding": "",
+    "cardinality_handling": "",
+    "transformation": "",
+    "action": "keep | drop",
+    "reason": "",
+    "notes": ""
+  }
+}
+```
+Important rules:
+- Be concise but precise
+- Do not assume unavailable data (only use given stats)
+- Treat features independently
+- Highlight risks clearly (especially identifiers & high cardinality)
+- If a feature looks like an identifier (e.g., very high unique values with low repetition), strongly consider dropping it
+- If distribution is highly imbalanced, mention its impact on modeling
+- Prefer practical, production-ready recommendations
